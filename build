@@ -1,0 +1,12 @@
+#/bin/bash
+
+read -p "Docker namespace [cetres]: " namespace
+namespace=${namespace:-cetres}
+
+tag=$(git symbolic-ref --short HEAD)
+
+if [[ $tag == 'master' ]]; then
+	tag='latest'
+fi
+
+docker build -t $namespace/centos-apache-php:$tag .

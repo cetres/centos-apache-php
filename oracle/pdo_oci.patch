@@ -1,0 +1,11 @@
+--- a/pdo_oci.c	2016-12-10 21:04:36.957172591 +0000
++++ b/pdo_oci.c	2016-12-10 21:05:11.380073738 +0000
+@@ -31,7 +31,7 @@
+ #include "php_pdo_oci_int.h"
+ 
+ /* {{{ pdo_oci_functions[] */
+-function_entry pdo_oci_functions[] = {
++zend_function_entry pdo_oci_functions[] = {
+ 	{NULL, NULL, NULL}
+ };
+ /* }}} */

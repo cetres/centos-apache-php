@@ -8,6 +8,9 @@ Release based on official [centos] (https://hub.docker.com/_/centos/) images wit
 - Apache
 - PHP
 - PDO
+- PDO OCI
+- OCI8
+- MSSQL
 - MySQL
 - GD
 

@@ -32,49 +32,20 @@ RUN	yum -y update \
         php56w-pear \
         php56w-pdo \
 	php56w-xml \
-	unzip \
         libaio
 
+RUN yum clean all
+
 # -----------------------------------------------------------------------------
-# Install Oracle driver
+# Install Oracle drivers
 #
 # Oracle clients need to be downloaded in oracle path
 # -----------------------------------------------------------------------------
-RUN yum groupinstall --setopt=tsflags=nodocs -y "Development Tools"
-
-ADD oracle/oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm /tmp/
-RUN rpm -ih /tmp/oracle-instantclient11.2-basic-11.2.0.4.0-1.x86_64.rpm
-RUN ln -s /usr/lib/oracle/11.2/client64 /usr/lib/oracle/11.2/client
-RUN echo "/usr/lib/oracle/11.2/client64/lib" > /etc/ld.so.conf.d/oracle.conf
-RUN ldconfig
-
-ADD oracle/oracle-instantclient11.2-devel-11.2.0.4.0-1.x86_64.rpm /tmp/
-RUN rpm -ih /tmp/oracle-instantclient11.2-devel-11.2.0.4.0-1.x86_64.rpm
-RUN ln -s /usr/include/oracle/11.2/client64 /usr/lib/oracle/11.2/client64/lib/include
-RUN ln -s /usr/include/oracle/11.2/client64 /usr/include/oracle/11.2/client
-
-RUN echo 'instantclient,/usr/lib/oracle/11.2/client64/lib' | pecl install oci8-2.0.12
+ADD oracle/oci8.so /usr/lib64/php/modules/
 RUN echo "extension=oci8.so" > /etc/php.d/oci8.ini
 
-# -----------------------------------------------------------------------------
-# Install Oracle PDO driver
-# -----------------------------------------------------------------------------
-RUN curl -s https://pecl.php.net/get/PDO_OCI-1.0.tgz -o /tmp/PDO_OCI-1.0.tgz
-RUN tar -xvzf /tmp/PDO_OCI-1.0.tgz -C /tmp/
-ADD oracle/*.patch /tmp/
-RUN patch /tmp/PDO_OCI-1.0/config.m4 < /tmp/config.patch
-RUN patch /tmp/PDO_OCI-1.0/pdo_oci.c < /tmp/pdo_oci.patch
-WORKDIR /tmp/PDO_OCI-1.0
-RUN phpize
-RUN ./configure --with-pdo-oci=instantclient,/usr,11.2
-RUN make install
+ADD oracle/pdo_oci.so /usr/lib64/php/modules/
 RUN echo "extension=pdo_oci.so" > /etc/php.d/pdo_oci.ini
-WORKDIR /
-
-# -----------------------------------------------------------------------------
-# Cleaning
-# -----------------------------------------------------------------------------
-RUN yum clean all
 
 # -----------------------------------------------------------------------------
 # Set ports

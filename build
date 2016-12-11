@@ -1,12 +1,20 @@
 #/bin/bash
 
-read -p "Docker namespace [cetres]: " namespace
-namespace=${namespace:-cetres}
+NAMESPACE=cetres
+TAG=$(git symbolic-ref --short HEAD)
+INSTANCE=php-deps
 
-tag=$(git symbolic-ref --short HEAD)
-
-if [[ $tag == 'master' ]]; then
-	tag='latest'
+if [[ $TAG == 'master' ]]; then
+	TAG='latest'
 fi
 
-docker build -t $namespace/centos-apache-php:$tag .
+docker build -t $NAMESPACE/centos-apache-php:$TAG .
+
+ID=$(docker ps -qf name=$INSTANCE)
+if [ "$ID" != "" ]; then
+  docker stop $ID && docker rm $ID
+fi
+
+docker run -d --name $INSTANCE -t $NAMESPACE/centos-apache-php:$TAG
+docker cp $INSTANCE:/usr/lib64/php/modules/pdo_oci.so ./oracle/
+docker cp $INSTANCE:/usr/lib64/php/modules/oci8.so ./oracle/

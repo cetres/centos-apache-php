@@ -41,6 +41,18 @@ RUN yum clean all
 #
 # Oracle clients need to be downloaded in oracle path
 # -----------------------------------------------------------------------------
+RUN mkdir -p /usr/lib/oracle/11.2/client64/lib/
+ADD oracle/libclntsh.so.11.1.gz /usr/lib/oracle/11.2/client64/lib/
+RUN gunzip /usr/lib/oracle/11.2/client64/lib/libclntsh.so.11.1.gz
+ADD oracle/libnnz11.so.gz /usr/lib/oracle/11.2/client64/lib/
+RUN gunzip /usr/lib/oracle/11.2/client64/lib/libnnz11.so.gz
+ADD oracle/libocci.so.11.1.gz /usr/lib/oracle/11.2/client64/lib/
+RUN gunzip /usr/lib/oracle/11.2/client64/lib/libocci.so.11.1.gz
+RUN ln -s /usr/lib/oracle/11.2/client64/lib/libclntsh.so.11.1 /usr/lib/oracle/11.2/client64/lib/libclntsh.so
+RUN ln -s /usr/lib/oracle/11.2/client64/lib/libocci.so.11.1 /usr/lib/oracle/11.2/client64/lib/libocci.so
+RUN echo "/usr/lib/oracle/11.2/client64/lib" > /etc/ld.so.conf.d/oracle.conf
+RUN ldconfig
+
 ADD oracle/oci8.so /usr/lib64/php/modules/
 RUN echo "extension=oci8.so" > /etc/php.d/oci8.ini
 

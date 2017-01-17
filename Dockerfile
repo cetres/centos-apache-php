@@ -31,6 +31,7 @@ RUN	yum -y update \
         php56w-mssql \
         php56w-pear \
         php56w-pdo \
+	php56w-intl \
 	php56w-xml \
         libaio
 

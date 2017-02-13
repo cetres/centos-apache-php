@@ -19,7 +19,6 @@ RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.
 RUN	yum -y update \
 	&& yum --setopt=tsflags=nodocs -y install \
         httpd \
-	mod_ssl \
         php56w \
         php56w-common \
         php56w-devel \
@@ -33,9 +32,7 @@ RUN	yum -y update \
         php56w-pdo \
 	php56w-intl \
 	php56w-xml \
-        libaio \
-        subversion \
-        git
+        libaio
 
 RUN yum clean all
 
@@ -62,10 +59,12 @@ RUN echo "extension=oci8.so" > /etc/php.d/oci8.ini
 ADD oracle/pdo_oci.so /usr/lib64/php/modules/
 RUN echo "extension=pdo_oci.so" > /etc/php.d/pdo_oci.ini
 
+RUN sed -i 's/Listen 80/Listen 8080/' /etc/httpd/conf/httpd.conf
+
 # -----------------------------------------------------------------------------
 # Set ports
 # -----------------------------------------------------------------------------
-EXPOSE 80 443
+EXPOSE 8080
 
 # -----------------------------------------------------------------------------
 # Start

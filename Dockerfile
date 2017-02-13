@@ -33,7 +33,9 @@ RUN	yum -y update \
         php56w-pdo \
 	php56w-intl \
 	php56w-xml \
-        libaio
+        libaio \
+        subversion \
+        git
 
 RUN yum clean all
 

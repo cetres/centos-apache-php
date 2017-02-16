@@ -61,6 +61,8 @@ RUN echo "extension=pdo_oci.so" > /etc/php.d/pdo_oci.ini
 
 RUN sed -i 's/Listen 80/Listen 8080/' /etc/httpd/conf/httpd.conf
 
+RUN ln -sf /dev/stderr /var/log/httpd/error_log
+
 # -----------------------------------------------------------------------------
 # Set ports
 # -----------------------------------------------------------------------------

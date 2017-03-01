@@ -32,6 +32,7 @@ RUN	yum -y update \
         php56w-pdo \
 	php56w-intl \
 	php56w-xml \
+        php56w-pecl-xdebug \
         libaio
 
 RUN yum clean all

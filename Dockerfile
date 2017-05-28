@@ -10,14 +10,14 @@ MAINTAINER Gustavo Oliveira <cetres@gmail.com>
 # -----------------------------------------------------------------------------
 # Import the RPM GPG keys for Repositories
 # -----------------------------------------------------------------------------
-RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
-	&& rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
+RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
+    rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
 
 # -----------------------------------------------------------------------------
 # Apache + (PHP 5.6 from https://webtatic.com)
 # -----------------------------------------------------------------------------
-RUN	yum -y update \
-	&& yum --setopt=tsflags=nodocs -y install \
+RUN  yum --setopt=tsflags=nodocs -y update && \
+     yum --setopt=tsflags=nodocs -y install \
         httpd \
         php56w \
         php56w-common \

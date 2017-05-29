@@ -63,9 +63,10 @@ RUN echo "extension=pdo_oci.so" > /etc/php.d/pdo_oci.ini
 RUN sed -i 's/Listen 80/Listen 8080/' /etc/httpd/conf/httpd.conf
 
 # -----------------------------------------------------------------------------
-# Set ports
+# Set ports and env variable HOME
 # -----------------------------------------------------------------------------
 EXPOSE 8080
+ENV HOME /var/www
 
 # -----------------------------------------------------------------------------
 # Start

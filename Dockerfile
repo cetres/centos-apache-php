@@ -33,34 +33,29 @@ RUN  yum --setopt=tsflags=nodocs -y update && \
 	php56w-intl \
 	php56w-xml \
         php56w-pecl-xdebug \
-        libaio
-
-RUN yum clean all
+        libaio \
+        unzip && \
+    yum clean all && \
+    rm -rf /var/cache/yum
 
 # -----------------------------------------------------------------------------
 # Install Oracle drivers
 #
 # Oracle clients need to be downloaded in oracle path
 # -----------------------------------------------------------------------------
-RUN mkdir -p /usr/lib/oracle/11.2/client64/lib/
-ADD oracle/libclntsh.so.11.1.gz /usr/lib/oracle/11.2/client64/lib/
-RUN gunzip /usr/lib/oracle/11.2/client64/lib/libclntsh.so.11.1.gz
-ADD oracle/libnnz11.so.gz /usr/lib/oracle/11.2/client64/lib/
-RUN gunzip /usr/lib/oracle/11.2/client64/lib/libnnz11.so.gz
-ADD oracle/libocci.so.11.1.gz /usr/lib/oracle/11.2/client64/lib/
-RUN gunzip /usr/lib/oracle/11.2/client64/lib/libocci.so.11.1.gz
-RUN ln -s /usr/lib/oracle/11.2/client64/lib/libclntsh.so.11.1 /usr/lib/oracle/11.2/client64/lib/libclntsh.so
-RUN ln -s /usr/lib/oracle/11.2/client64/lib/libocci.so.11.1 /usr/lib/oracle/11.2/client64/lib/libocci.so
-RUN echo "/usr/lib/oracle/11.2/client64/lib" > /etc/ld.so.conf.d/oracle.conf
-RUN ldconfig
-
-ADD oracle/oci8.so /usr/lib64/php/modules/
-RUN echo "extension=oci8.so" > /etc/php.d/oci8.ini
-
-ADD oracle/pdo_oci.so /usr/lib64/php/modules/
-RUN echo "extension=pdo_oci.so" > /etc/php.d/pdo_oci.ini
-
-RUN sed -i 's/Listen 80/Listen 8080/' /etc/httpd/conf/httpd.conf
+ADD oracle/instantclient-basiclite-linux.x64-12.2.0.1.0.zip /tmp/
+COPY oracle/*.so /usr/lib64/php/modules/
+RUN mkdir -p /usr/lib/oracle/12.2/client64/lib/ && \
+    unzip -q /tmp/instantclient-basiclite-linux.x64-12.2.0.1.0.zip -d /tmp && \
+    mv /tmp/instantclient_12_2/* /usr/lib/oracle/12.2/client64/lib/ && \
+    rm /tmp/instantclient-basiclite-linux.x64-12.2.0.1.0.zip && \
+    ln -s /usr/lib/oracle/12.2/client64/lib/libclntsh.so.12.1 /usr/lib/oracle/12.2/client64/lib/libclntsh.so && \
+    ln -s /usr/lib/oracle/12.2/client64/lib/libocci.so.12.1 /usr/lib/oracle/12.2/client64/lib/libocci.so && \
+    echo "/usr/lib/oracle/12.2/client64/lib" > /etc/ld.so.conf.d/oracle.conf && \
+    ldconfig && \
+    echo "extension=oci8.so" > /etc/php.d/oci8.ini && \
+    echo "extension=pdo_oci.so" > /etc/php.d/pdo_oci.ini && \
+    sed -i 's/Listen 80/Listen 8080/' /etc/httpd/conf/httpd.conf
 
 # -----------------------------------------------------------------------------
 # Set ports and env variable HOME

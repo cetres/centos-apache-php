@@ -7,14 +7,37 @@
 FROM centos:centos7
 LABEL maintainer="Gustavo Oliveira <cetres@gmail.com>"
 
+RUN yum -y update && \
+    yum -y install \
+        epel-release \
+        httpd \
+        unzip
+
+# -----------------------------------------------------------------------------
+# Install Oracle drivers
+#
+# Oracle clients need to be downloaded in oracle path
+# -----------------------------------------------------------------------------
+ADD oracle/instantclient-basiclite-linux.x64-18.3.0.0.0dbru.zip /tmp/
+RUN mkdir -p /usr/lib/oracle/18.3/client64/lib/ && \
+    unzip -q /tmp/instantclient-basiclite-linux.x64-18.3.0.0.0dbru.zip -d /tmp && \
+    mv /tmp/instantclient_18_3/* /usr/lib/oracle/18.3/client64/lib/ && \
+    rm /tmp/instantclient-basiclite-linux.x64-18.3.0.0.0dbru.zip && \
+    echo "/usr/lib/oracle/18.3/client64/lib" > /etc/ld.so.conf.d/oracle.conf && \
+    ldconfig 
+
+# -----------------------------------------------------------------------------
+# Install SQL Server drivers
+# -----------------------------------------------------------------------------
+ADD https://packages.microsoft.com/config/rhel/7/prod.repo /etc/yum.repos.d/mssql-release.repo
+RUN ACCEPT_EULA=Y yum install -y msodbcsql
+
 # -----------------------------------------------------------------------------
 # Apache 2.4 + (PHP 7.2 from Remi)
 # -----------------------------------------------------------------------------
 RUN yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm && \
     yum-config-manager --enable remi-php72 && \
-    yum -y update && \
     yum -y install \
-        httpd \
         php72-php \
         php72-php-common \
         php72-php-devel \
@@ -29,10 +52,13 @@ RUN yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm && \
 	php72-php-xml \
         php72-php-oci8 \
         php72-php-sqlsrv \
-        libaio \
-        unzip && \
+        libaio && \
+    sed -i 's/;error_log = syslog/error_log = \/dev\/stderr/' /etc/opt/remi/php72/php.ini && \
+    ln -sf /dev/stdout /var/log/httpd/access_log && \
+    ln -sf /dev/stderr /var/log/httpd/error_log && \
     yum clean all && \
     rm -rf /var/cache/yum && \
+    rm -f /etc/httpd/conf.d/{userdir.conf,welcome.conf} && \
     sed -i 's/Listen 80/Listen 8080/' /etc/httpd/conf/httpd.conf
 
 # -----------------------------------------------------------------------------
@@ -44,4 +70,4 @@ ENV HOME /var/www
 # -----------------------------------------------------------------------------
 # Start
 # -----------------------------------------------------------------------------
-CMD ["/opt/rh/httpd24/root/usr/sbin/httpd-scl-wrapper", "-DFOREGROUND"]
+CMD ["/usr/sbin/httpd", "-DFOREGROUND"]

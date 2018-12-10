@@ -5,34 +5,28 @@
 #
 # =============================================================================
 FROM centos:centos7
-MAINTAINER Gustavo Oliveira <cetres@gmail.com>
+LABEL maintainer="Gustavo Oliveira <cetres@gmail.com>"
 
 # -----------------------------------------------------------------------------
-# Import the RPM GPG keys for Repositories
+# Apache 2.4 + (PHP 7.1 from SCL)
 # -----------------------------------------------------------------------------
-RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
-    rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
-
-# -----------------------------------------------------------------------------
-# Apache + (PHP 5.6 from https://webtatic.com)
-# -----------------------------------------------------------------------------
-RUN  yum --setopt=tsflags=nodocs -y update && \
-     yum --setopt=tsflags=nodocs -y install \
+RUN yum -y install centos-release-scl && \
+    yum-config-manager --enable rhel-server-rhscl-7-rpms && \
+    yum -y update && \
+    yum -y install \
         httpd \
-        php56w \
-        php56w-common \
-        php56w-devel \
-        php56w-mysql \
-	php56w-mbstring \
-	php56w-soap \
-	php56w-gd \
-        php56w-ldap \
-        php56w-mssql \
-        php56w-pear \
-        php56w-pdo \
-	php56w-intl \
-	php56w-xml \
-        php56w-pecl-xdebug \
+        rh-php71-php \
+        rh-php71-php-common \
+        rh-php71-php-devel \
+        rh-php71-php-mysqlnd \
+	rh-php71-php-mbstring \
+	rh-php71-php-soap \
+	rh-php71-php-gd \
+        rh-php71-php-ldap \
+        rh-php71-php-pear \
+        rh-php71-php-pdo \
+	rh-php71-php-intl \
+	rh-php71-php-xml \
         libaio \
         unzip && \
     yum clean all && \

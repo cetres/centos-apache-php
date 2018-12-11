@@ -1,7 +1,7 @@
 # Supported tags and respective `Dockerfile` links
 
 -   [`latest`] Centos 7 + Apache 2.4 + PHP 5.6
--   [`php7`] (Desistido por nao existir driver do mssql)
+-   [`php7_remi`] Centos 7 + Apache 2.4 + PHP 7.2
 
 # Info
 Release based on official [centos] (https://hub.docker.com/_/centos/) images with addition of:
@@ -9,9 +9,8 @@ Release based on official [centos] (https://hub.docker.com/_/centos/) images wit
 - Apache
 - PHP
 - PDO
-- PDO OCI
 - OCI8
-- MSSQL
+- SQLSRV
 - MySQL
 - GD
 
@@ -19,5 +18,5 @@ Release based on official [centos] (https://hub.docker.com/_/centos/) images wit
 Run this image:
 
 ```console
-$ docker run --name centos-apache-php -d cetres/centos-apache-php
+$ docker run --name centos-apache-php -d cetres/centos-apache-php:php7_remi
 ```

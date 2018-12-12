@@ -52,6 +52,7 @@ RUN yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm && \
 	php72-php-xml \
         php72-php-oci8 \
         php72-php-sqlsrv \
+        php72-php-pear \
         libaio && \
     sed -i 's/;error_log = syslog/error_log = \/dev\/stderr/' /etc/opt/remi/php72/php.ini && \
     ln -sf /dev/stdout /var/log/httpd/access_log && \

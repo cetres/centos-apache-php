@@ -57,6 +57,7 @@ RUN yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm && \
     sed -i 's/;error_log = syslog/error_log = \/dev\/stderr/' /etc/opt/remi/php72/php.ini && \
     ln -sf /dev/stdout /var/log/httpd/access_log && \
     ln -sf /dev/stderr /var/log/httpd/error_log && \
+    ln -sf /usr/bin/php72-pear /usr/bin/pear && \
     ln -sf /opt/remi/php72/root/usr/share/php /usr/share/php && \
     ln -sf /var/opt/remi/php72/lib/php /var/lib/php && \
     yum clean all && \

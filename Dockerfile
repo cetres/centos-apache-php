@@ -1,7 +1,7 @@
 # =============================================================================
 # cetres/centos-apache-php
 #
-# CentOS-7, Apache 2.4, PHP 7.2
+# CentOS-7, Apache 2.4, PHP 5.6
 #
 # =============================================================================
 FROM centos:centos7
@@ -33,33 +33,33 @@ ADD https://packages.microsoft.com/config/rhel/7/prod.repo /etc/yum.repos.d/mssq
 RUN ACCEPT_EULA=Y yum install -y msodbcsql
 
 # -----------------------------------------------------------------------------
-# Apache 2.4 + (PHP 7.2 from Remi)
+# Apache 2.4 + (PHP 5.6 from Remi)
 # -----------------------------------------------------------------------------
 RUN yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm && \
-    yum-config-manager --enable remi-php72 && \
+    yum-config-manager --enable remi-php56 && \
     yum -y install \
-        php72-php \
-        php72-php-common \
-        php72-php-devel \
-        php72-php-mysqlnd \
-	php72-php-mbstring \
-	php72-php-soap \
-	php72-php-gd \
-        php72-php-ldap \
-        php72-php-pear \
-        php72-php-pdo \
-	php72-php-intl \
-	php72-php-xml \
-        php72-php-oci8 \
-        php72-php-sqlsrv \
-        php72-php-pear \
+        php56-php \
+        php56-php-common \
+        php56-php-devel \
+        php56-php-mysqlnd \
+	php56-php-mbstring \
+	php56-php-soap \
+	php56-php-gd \
+        php56-php-ldap \
+        php56-php-pear \
+        php56-php-pdo \
+	php56-php-intl \
+	php56-php-xml \
+        php56-php-oci8 \
+        php56-php-sqlsrv \
+        php56-php-pear \
         libaio && \
-    sed -i 's/;error_log = syslog/error_log = \/dev\/stderr/' /etc/opt/remi/php72/php.ini && \
+    sed -i 's/;error_log = syslog/error_log = \/dev\/stderr/' /etc/opt/remi/php56/php.ini && \
     ln -sf /dev/stdout /var/log/httpd/access_log && \
     ln -sf /dev/stderr /var/log/httpd/error_log && \
-    ln -sf /usr/bin/php72-pear /usr/bin/pear && \
-    ln -sf /opt/remi/php72/root/usr/share/php /usr/share/php && \
-    ln -sf /var/opt/remi/php72/lib/php /var/lib/php && \
+    ln -sf /usr/bin/php56-pear /usr/bin/pear && \
+    ln -sf /opt/remi/php56/root/usr/share/php /usr/share/php && \
+    ln -sf /var/opt/remi/php56/lib/php /var/lib/php && \
     yum clean all && \
     rm -rf /var/cache/yum && \
     rm -f /etc/httpd/conf.d/{userdir.conf,welcome.conf} && \

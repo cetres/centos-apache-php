@@ -59,7 +59,9 @@ RUN yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm && \
     ln -sf /dev/stderr /var/log/httpd/error_log && \
     ln -sf /usr/bin/php72-pear /usr/bin/pear && \
     ln -sf /opt/remi/php72/root/usr/share/php /usr/share/php && \
+    chmod -R g+w /opt/remi/php72/root/usr/share/php && \
     ln -sf /var/opt/remi/php72/lib/php /var/lib/php && \
+    chmod -R g+w /var/www/html && \
     yum clean all && \
     rm -rf /var/cache/yum && \
     rm -f /etc/httpd/conf.d/{userdir.conf,welcome.conf} && \

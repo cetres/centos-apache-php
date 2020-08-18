@@ -27,29 +27,28 @@ RUN mkdir -p /usr/lib/oracle/18.5/client64/lib/ && \
     ldconfig 
 
 # -----------------------------------------------------------------------------
-# Install SQL Server drivers
+# Install SQL Server drivers repository
 # -----------------------------------------------------------------------------
 ADD https://packages.microsoft.com/config/rhel/7/prod.repo /etc/yum.repos.d/mssql-release.repo
-RUN ACCEPT_EULA=Y yum install -y msodbcsql
 
 # -----------------------------------------------------------------------------
 # Apache 2.4 + (PHP 7.2 from Remi)
 # -----------------------------------------------------------------------------
 RUN yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm && \
     yum-config-manager --enable remi-php72 && \
-    yum -y install \
+    ACCEPT_EULA=Y yum -y install \
         php72-php \
         php72-php-common \
         php72-php-devel \
         php72-php-mysqlnd \
-	php72-php-mbstring \
-	php72-php-soap \
-	php72-php-gd \
+        php72-php-mbstring \
+        php72-php-soap \
+        php72-php-gd \
         php72-php-ldap \
         php72-php-pear \
         php72-php-pdo \
-	php72-php-intl \
-	php72-php-xml \
+        php72-php-intl \
+        php72-php-xml \
         php72-php-oci8 \
         php72-php-sqlsrv \
         php72-php-pear \

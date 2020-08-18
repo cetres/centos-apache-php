@@ -18,12 +18,12 @@ RUN yum -y update && \
 #
 # Oracle clients need to be downloaded in oracle path
 # -----------------------------------------------------------------------------
-ADD oracle/instantclient-basiclite-linux.x64-18.3.0.0.0dbru.zip /tmp/
-RUN mkdir -p /usr/lib/oracle/18.3/client64/lib/ && \
-    unzip -q /tmp/instantclient-basiclite-linux.x64-18.3.0.0.0dbru.zip -d /tmp && \
-    mv /tmp/instantclient_18_3/* /usr/lib/oracle/18.3/client64/lib/ && \
-    rm /tmp/instantclient-basiclite-linux.x64-18.3.0.0.0dbru.zip && \
-    echo "/usr/lib/oracle/18.3/client64/lib" > /etc/ld.so.conf.d/oracle.conf && \
+ADD oracle/instantclient-basiclite-linux.x64-18.5.0.0.0dbru.zip /tmp/
+RUN mkdir -p /usr/lib/oracle/18.5/client64/lib/ && \
+    unzip -q /tmp/instantclient-basiclite-linux.x64-18.5.0.0.0dbru.zip -d /tmp && \
+    mv /tmp/instantclient_18_5/* /usr/lib/oracle/18.5/client64/lib/ && \
+    rm /tmp/instantclient-basiclite-linux.x64-18.5.0.0.0dbru.zip && \
+    echo "/usr/lib/oracle/18.5/client64/lib" > /etc/ld.so.conf.d/oracle.conf && \
     ldconfig 
 
 # -----------------------------------------------------------------------------
